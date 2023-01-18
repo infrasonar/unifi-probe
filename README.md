@@ -22,4 +22,3 @@ Variable            | Default                        | Description
 ```
 docker build -t unifi-probe . --no-cache
 ```
-# unifi-probe
