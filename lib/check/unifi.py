@@ -15,4 +15,10 @@ async def check_unifi(
         check_config: dict):
 
     state = await snmpquery(asset, asset_config, check_config, QUERIES)
+    for item in state.get('unifiRadio', []):
+        item.pop('Index')
+        item['name'] = item.pop('Name')
+    for item in state.get('unifiVap', []):
+        item.pop('Index')
+        item['name'] = item.pop('Name')
     return state
