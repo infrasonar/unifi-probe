@@ -1,6 +1,8 @@
 from asyncsnmplib.mib.mib_index import MIB_INDEX
+from asyncsnmplib.exceptions import SnmpNoAuthParams, SnmpNoConnection
+from asyncsnmplib.utils import InvalidConfigException, snmp_queries
 from libprobe.asset import Asset
-from ..snmpquery import snmpquery
+from libprobe.exceptions import CheckException, IgnoreResultException
 
 QUERIES = (
     MIB_INDEX['UBNT-UniFi-MIB']['unifiApSystem'],
@@ -14,11 +16,21 @@ async def check_unifi(
         asset_config: dict,
         check_config: dict):
 
-    state = await snmpquery(asset, asset_config, check_config, QUERIES)
-    for item in state.get('unifiRadio', []):
-        item.pop('Index')
-        item['name'] = item.pop('Name')
-    for item in state.get('unifiVap', []):
-        item.pop('Index')
-        item['name'] = item.pop('Name')
+    address = check_config.get('address')
+    if address is None:
+        address = asset.name
+    try:
+        state = await snmp_queries(address, asset_config, QUERIES)
+    except SnmpNoConnection:
+        raise CheckException('unable to connect')
+    except (InvalidConfigException, SnmpNoAuthParams):
+        raise IgnoreResultException
+    except Exception:
+        raise
+    for item in state.get('unifiRadioEntry', []):
+        item.pop('unifiRadioIndex')
+        item['name'] = item.pop('unifiRadioName')
+    for item in state.get('unifiVapEntry', []):
+        item.pop('unifiVapIndex')
+        item['name'] = item.pop('unifiVapName')
     return state
