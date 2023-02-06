@@ -22,3 +22,28 @@ Variable            | Default                        | Description
 ```
 docker build -t unifi-probe . --no-cache
 ```
+
+## Config
+
+See the [SNMP probe](https://github.com/infrasonar/snmp-probe#config).
+
+## Dry run
+
+Available checks:
+- `unifi`
+
+Create a yaml file, for example _(test.yaml)_:
+
+```yaml
+asset:
+  name: "foo.local"
+  check: "unifi"
+  config:
+    address: "192.168.1.2"
+```
+
+Run the probe with the `DRY_RUN` environment variable set the the yaml file above.
+
+```
+DRY_RUN=test.yaml python main.py
+```
