@@ -3,6 +3,8 @@
 
 # InfraSonar UniFi Probe
 
+Documentation: https://docs.infrasonar.com/collectors/probes/unifi/
+
 ## Environment variable
 
 Variable            | Default                        | Description
