@@ -17,10 +17,8 @@ async def check_unifi(
     address = check_config.get('address')
     if address is None:
         address = asset.name
-    try:
-        state = await snmp_queries(address, asset_config, QUERIES)
-    except Exception:
-        raise
+
+    state = await snmp_queries(address, asset_config, QUERIES)
     for item in state.get('unifiRadioEntry', []):
         item.pop('unifiRadioIndex')
         item['name'] = item.pop('unifiRadioName')
