@@ -1,6 +1,6 @@
 from asyncsnmplib.mib.mib_index import MIB_INDEX
-from asyncsnmplib.utils import snmp_queries
 from libprobe.asset import Asset
+from ..utils import get_data
 
 QUERIES = (
     MIB_INDEX['UBNT-UniFi-MIB']['unifiApSystem'],
@@ -14,11 +14,7 @@ async def check_unifi(
         asset_config: dict,
         check_config: dict):
 
-    address = check_config.get('address')
-    if address is None:
-        address = asset.name
-
-    state = await snmp_queries(address, asset_config, QUERIES)
+    state = await get_data(asset, asset_config, check_config, QUERIES)
     for item in state.get('unifiRadioEntry', []):
         item.pop('unifiRadioIndex')
         item['name'] = item.pop('unifiRadioName')
