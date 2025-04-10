@@ -4,9 +4,9 @@ from ..snmpclient import get_snmp_client
 from ..snmpquery import snmpquery
 
 QUERIES = (
-    MIB_INDEX['UBNT-UniFi-MIB']['unifiApSystem'],
-    MIB_INDEX['UBNT-UniFi-MIB']['unifiRadioEntry'],
-    MIB_INDEX['UBNT-UniFi-MIB']['unifiVapEntry'],
+    (MIB_INDEX['UBNT-UniFi-MIB']['unifiApSystem'], False),
+    (MIB_INDEX['UBNT-UniFi-MIB']['unifiRadioEntry'], True),
+    (MIB_INDEX['UBNT-UniFi-MIB']['unifiVapEntry'], True),
 )
 
 
